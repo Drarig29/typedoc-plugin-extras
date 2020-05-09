@@ -1,0 +1,39 @@
+{
+    "name": "typedoc-plugin-extras",
+    "version": "1.0.0",
+    "description": "A plugin for TypeDoc that enables to add little extras to the generated documentation.",
+    "main": "dist/index.js",
+    "files": [
+        "dist/"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "prepublishOnly": "npm run build"
+    },
+    "author": "Corentin Girard",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Drarig29/typedoc-plugin-extras/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Drarig29/typedoc-plugin-extras.git"
+    },
+    "keywords": [
+        "extras",
+        "typescript",
+        "documentation",
+        "api",
+        "typedocplugin",
+        "plugin",
+        "typedoc"
+    ],
+    "peerDependencies": {
+        "typedoc": ">=0.16.0"
+    },
+    "devDependencies": {
+        "@types/node": "^13.7.5",
+        "typedoc": "0.16.10",
+        "typescript": "3.7.x"
+    }
+}
