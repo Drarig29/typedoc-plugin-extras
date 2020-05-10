@@ -2,13 +2,18 @@
 
 **This plugin only works for HTML documentation.**
 
-A plugin for [TypeDoc](https://github.com/TypeStrong/typedoc) that enables to add a extras to the generated documentation.
+A plugin for [TypeDoc](https://github.com/TypeStrong/typedoc) that adds extras to the generated documentation (favicon and date/time of generation).
 
-It finds the `<head>` and appends the favicon to it. It can also add date and/or time of generation after "Generated using TypeDoc".
+* It can find the `<head>` of the document and appends a favicon to it.
+* It can also add date and/or time of generation after "Generated using TypeDoc".
 
 **No date/time will be added if `--hideGenerator` is set.**
 
 [![npm](https://img.shields.io/npm/v/typedoc-plugin-extras.svg)](https://www.npmjs.com/package/typedoc-plugin-extras)
+
+## Example
+
+![Example](public/example.png)
 
 ## Installation
 
