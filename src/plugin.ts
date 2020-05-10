@@ -25,7 +25,7 @@ export class ExtrasPlugin extends RendererComponent {
         }
 
         // Add generation date and/or time.
-        if (!hideDate || !hideTime) {
+        if (!this.application.options.getValue('hideGenerator') && (!hideDate || !hideTime)) {
             const p = document.querySelector('body > div.container.tsd-generator > p');
             const now = new Date();
             const date = ` the ${now.toLocaleDateString()}`
