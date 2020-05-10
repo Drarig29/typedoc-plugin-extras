@@ -21,12 +21,12 @@
         "url": "git+https://github.com/Drarig29/typedoc-plugin-extras.git"
     },
     "keywords": [
-        "extras",
+        "date",
+        "time",
+        "favicon",
         "typescript",
         "documentation",
-        "api",
         "typedocplugin",
-        "plugin",
         "typedoc"
     ],
     "peerDependencies": {
