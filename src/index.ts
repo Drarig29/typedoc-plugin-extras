@@ -1,31 +1,49 @@
 import { Application } from 'typedoc';
-import { PluginHost } from 'typedoc/dist/lib/utils';
+import { PluginHost, ParameterType } from 'typedoc/dist/lib/utils';
 import { ExtrasPlugin } from './plugin';
-import { copyFileSync, unlinkSync, existsSync } from 'fs';
-import { join } from 'path';
+import { copyFileSync } from 'fs';
+import { join, basename } from 'path';
 import { RendererEvent } from 'typedoc/dist/lib/output/events';
 
 export function load(host: PluginHost) {
     const app: Application = host.application;
 
-    // app.options.addDeclaration({
-    //     name: 'plugin-option',
-    //     help: 'Displayed when --help is passed',
-    //     type: ParameterType.String,
-    //     defaultValue: ''
-    // });
+    app.options.addDeclaration({
+        name: 'favicon',
+        help: 'Extras Plugin: The name of the favicon file.',
+        type: ParameterType.String,
+        defaultValue: 'public/favicon.ico'
+    });
+
+    app.options.addDeclaration({
+        name: 'hideDate',
+        help: 'Extras Plugin: Hides the date of generation at the end of documentation pages.',
+        type: ParameterType.Boolean,
+        defaultValue: false
+    });
+
+    app.options.addDeclaration({
+        name: 'hideTime',
+        help: 'Extras Plugin: Hides the time of generation at the end of documentation pages.',
+        type: ParameterType.Boolean,
+        defaultValue: false
+    });
+
+    const config = {
+        favicon: app.options.getValue('favicon') as string,
+        hideDate: app.options.getValue('hideDate') as boolean,
+        hideTime: app.options.getValue('hideTime') as boolean
+    }
 
     const workingDir = process.cwd();
     const outDir = app.options.getValue('out') || './docs';
-    const icon = 'favicon.ico';
 
-    const from = join(workingDir, icon);
-    const to = join(workingDir, outDir, icon);
+    const inputFavicon = join(workingDir, config.favicon);
 
-    if (existsSync(to)) {
-        unlinkSync(to);
-    }
+    // Only keep the filename.
+    config.favicon = basename(config.favicon);
+    const outputFavicon = join(workingDir, outDir, config.favicon);
 
-    app.renderer.addComponent('extras', new ExtrasPlugin(app.renderer));
-    app.renderer.once(RendererEvent.END, () => copyFileSync(from, to));
+    app.renderer.addComponent('extras', new ExtrasPlugin(app.renderer, config));
+    app.renderer.once(RendererEvent.END, () => copyFileSync(inputFavicon, outputFavicon));
 }
