@@ -29,21 +29,15 @@ export function load(host: PluginHost) {
         defaultValue: false
     });
 
-    const config = {
-        favicon: app.options.getValue('favicon') as string,
-        hideDate: app.options.getValue('hideDate') as boolean,
-        hideTime: app.options.getValue('hideTime') as boolean
-    }
+    app.renderer.addComponent('extras', new ExtrasPlugin(app.renderer));
+    app.renderer.once(RendererEvent.END, () => {
+        const faviconPath = app.options.getValue('favicon') as string;
+        const workingDir = process.cwd();
+        const outDir = app.options.getValue('out') || './docs';
 
-    const workingDir = process.cwd();
-    const outDir = app.options.getValue('out') || './docs';
+        const inputFavicon = join(workingDir, faviconPath);
+        const outputFavicon = join(workingDir, outDir, basename(faviconPath));
 
-    const inputFavicon = join(workingDir, config.favicon);
-
-    // Only keep the filename.
-    config.favicon = basename(config.favicon);
-    const outputFavicon = join(workingDir, outDir, config.favicon);
-
-    app.renderer.addComponent('extras', new ExtrasPlugin(app.renderer, config));
-    app.renderer.once(RendererEvent.END, () => copyFileSync(inputFavicon, outputFavicon));
+        copyFileSync(inputFavicon, outputFavicon);
+    });
 }

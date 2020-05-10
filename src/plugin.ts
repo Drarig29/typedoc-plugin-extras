@@ -1,21 +1,9 @@
 import { RendererComponent } from 'typedoc/dist/lib/output/components';
 import { PageEvent } from 'typedoc/dist/lib/output/events';
 import { JSDOM } from 'jsdom';
-
-interface PluginConfig {
-    favicon: string,
-    hideDate: boolean,
-    hideTime: boolean
-}
+import { basename } from 'path';
 
 export class ExtrasPlugin extends RendererComponent {
-
-    private readonly config: PluginConfig;
-
-    constructor(owner: any, config: PluginConfig) {
-        super(owner);
-        this.config = config;
-    }
 
     initialize() {
         this.listenTo(this.owner, PageEvent.END, this.onRendererEndPage);
@@ -25,20 +13,24 @@ export class ExtrasPlugin extends RendererComponent {
         const dom = new JSDOM(page.contents);
         const document = dom.window.document;
 
+        const favicon = basename(this.application.options.getValue('favicon') as string);
+        const hideDate = this.application.options.getValue('hideDate') as boolean;
+        const hideTime = this.application.options.getValue('hideTime') as boolean;
+
         // Add icon.
         const head = document.querySelector('head');
-        head.innerHTML += `<link rel="icon" href="${this.config.favicon}" />`;
+        head.innerHTML += `<link rel="icon" href="${favicon}" />`;
 
         // Add generation date and/or time.
-        if (!this.config.hideDate || !this.config.hideTime) {
+        if (!hideDate || !hideTime) {
             const p = document.querySelector('body > div.container.tsd-generator > p');
             const now = new Date();
             const date = ` the ${now.toLocaleDateString()}`
             const time = ` at ${now.toLocaleTimeString()}`;
 
             p.innerHTML += ',';
-            if (!this.config.hideDate) p.innerHTML += date;
-            if (!this.config.hideTime) p.innerHTML += time;
+            if (!hideDate) p.innerHTML += date;
+            if (!hideTime) p.innerHTML += time;
         }
 
         page.contents = dom.serialize();
