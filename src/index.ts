@@ -10,9 +10,16 @@ export function load(host: PluginHost) {
 
     app.options.addDeclaration({
         name: 'favicon',
-        help: 'Extras Plugin: The name of the favicon file.',
+        help: 'Extras Plugin: Specify the name of the favicon file.',
         type: ParameterType.String,
         defaultValue: 'public/favicon.ico'
+    });
+
+    app.options.addDeclaration({
+        name: 'no-favicon',
+        help: 'Extras Plugin: Disable the favicon.',
+        type: ParameterType.Boolean,
+        defaultValue: false
     });
 
     app.options.addDeclaration({
@@ -31,6 +38,9 @@ export function load(host: PluginHost) {
 
     app.renderer.addComponent('extras', new ExtrasPlugin(app.renderer));
     app.renderer.once(RendererEvent.END, () => {
+        const noFavicon = app.options.getValue('no-favicon') as boolean;
+        if (noFavicon) return;
+
         const faviconPath = app.options.getValue('favicon') as string;
         const workingDir = process.cwd();
         const outDir = app.options.getValue('out') || './docs';

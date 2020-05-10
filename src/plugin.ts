@@ -13,13 +13,16 @@ export class ExtrasPlugin extends RendererComponent {
         const dom = new JSDOM(page.contents);
         const document = dom.window.document;
 
+        const noFavicon = this.application.options.getValue('no-favicon') as boolean;
         const favicon = basename(this.application.options.getValue('favicon') as string);
         const hideDate = this.application.options.getValue('hideDate') as boolean;
         const hideTime = this.application.options.getValue('hideTime') as boolean;
 
         // Add icon.
-        const head = document.querySelector('head');
-        head.innerHTML += `<link rel="icon" href="${favicon}" />`;
+        if (!noFavicon) {
+            const head = document.querySelector('head');
+            head.innerHTML += `<link rel="icon" href="${favicon}" />`;
+        }
 
         // Add generation date and/or time.
         if (!hideDate || !hideTime) {
