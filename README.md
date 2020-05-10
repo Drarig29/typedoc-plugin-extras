@@ -30,7 +30,7 @@ The favicon, date and time are automatically added by default. The favicon is co
 
 - `--favicon`<br>
   Specify the name of the favicon file. Defaults to `'public/favicon.ico'`.
-- `--no-favicon`<br>
+- `--noFavicon`<br>
   Disable the favicon.
 - `--hideDate`<br>
   Hides the date of generation at the end of documentation pages.

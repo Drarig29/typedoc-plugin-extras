@@ -16,7 +16,7 @@ export function load(host: PluginHost) {
     });
 
     app.options.addDeclaration({
-        name: 'no-favicon',
+        name: 'noFavicon',
         help: 'Extras Plugin: Disable the favicon.',
         type: ParameterType.Boolean,
         defaultValue: false
@@ -38,7 +38,7 @@ export function load(host: PluginHost) {
 
     app.renderer.addComponent('extras', new ExtrasPlugin(app.renderer));
     app.renderer.once(RendererEvent.END, () => {
-        const noFavicon = app.options.getValue('no-favicon') as boolean;
+        const noFavicon = app.options.getValue('noFavicon') as boolean;
         if (noFavicon) return;
 
         const faviconPath = app.options.getValue('favicon') as string;

@@ -13,7 +13,7 @@ export class ExtrasPlugin extends RendererComponent {
         const dom = new JSDOM(page.contents);
         const document = dom.window.document;
 
-        const noFavicon = this.application.options.getValue('no-favicon') as boolean;
+        const noFavicon = this.application.options.getValue('noFavicon') as boolean;
         const favicon = basename(this.application.options.getValue('favicon') as string);
         const hideDate = this.application.options.getValue('hideDate') as boolean;
         const hideTime = this.application.options.getValue('hideTime') as boolean;
