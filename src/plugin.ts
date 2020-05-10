@@ -3,6 +3,18 @@ import { PageEvent } from 'typedoc/dist/lib/output/events';
 import { JSDOM } from 'jsdom';
 import { basename } from 'path';
 
+/**
+ * Creates a relative path from a host file to a target file which is located in the root.
+ * @example `modules/_index_.html` --> `../favicon.ico`
+ * @param hostPath The path of the file which will contain the resulting relative path.
+ * @param targetFilename The name of the target file.
+ */
+function makeRelativeToRoot(hostPath: string, targetFilename: string): string {
+    const slashes = [...hostPath].filter(char => char === '/');
+    const parts = [...slashes.map(slash => '..'), targetFilename];
+    return parts.join('/');
+}
+
 export class ExtrasPlugin extends RendererComponent {
 
     initialize() {
@@ -21,7 +33,8 @@ export class ExtrasPlugin extends RendererComponent {
         // Add icon.
         if (!noFavicon) {
             const head = document.querySelector('head');
-            head.innerHTML += `<link rel="icon" href="${favicon}" />`;
+            const faviconUrl = makeRelativeToRoot(page.url, favicon);
+            head.innerHTML += `<link rel="icon" href="${faviconUrl}" />`;
         }
 
         // Add generation date and/or time.
