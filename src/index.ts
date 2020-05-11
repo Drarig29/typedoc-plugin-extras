@@ -24,14 +24,14 @@ export function load(host: PluginHost) {
 
     app.options.addDeclaration({
         name: 'hideDate',
-        help: 'Extras Plugin: Hides the date of generation at the end of documentation pages.',
+        help: 'Extras Plugin: Hide the date of generation at the end of documentation pages.',
         type: ParameterType.Boolean,
         defaultValue: false
     });
 
     app.options.addDeclaration({
         name: 'hideTime',
-        help: 'Extras Plugin: Hides the time of generation at the end of documentation pages.',
+        help: 'Extras Plugin: Hide the time of generation at the end of documentation pages.',
         type: ParameterType.Boolean,
         defaultValue: false
     });
