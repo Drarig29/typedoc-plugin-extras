@@ -10,8 +10,13 @@ import { basename } from 'path';
  * @param targetFilename The name of the target file.
  */
 function makeRelativeToRoot(hostPath: string, targetFilename: string): string {
-    const slashes = [...hostPath].filter(char => char === '/');
-    const parts = [...slashes.map(slash => '..'), targetFilename];
+    // Find separators.
+    const match = hostPath.match(/[/\\]/g);
+    if (!match) return targetFilename;
+
+    // Create path with one '../' per separator and targetFilename at the end.
+    const separatorCount = match.length;
+    const parts = [...Array(separatorCount).fill('..'), targetFilename];
     return parts.join('/');
 }
 
