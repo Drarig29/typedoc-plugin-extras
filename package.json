@@ -38,7 +38,5 @@
         "typedoc": "0.16.10",
         "typescript": "3.7.x"
     },
-    "dependencies": {
-        "jsdom": "^16.2.2"
-    }
+    "dependencies": {}
 }
