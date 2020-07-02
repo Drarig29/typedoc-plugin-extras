@@ -33,12 +33,9 @@
         "typedoc": ">=0.16.0"
     },
     "devDependencies": {
-        "@types/jsdom": "^16.2.1",
         "@types/node": "^13.7.5",
-        "typedoc": "0.16.10",
-        "typescript": "3.7.x"
+        "typedoc": "^0.17.8",
+        "typescript": "^3.8.3"
     },
-    "dependencies": {
-        "jsdom": "^16.2.2"
-    }
+    "dependencies": {}
 }

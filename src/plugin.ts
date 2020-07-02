@@ -1,6 +1,5 @@
 import { RendererComponent } from 'typedoc/dist/lib/output/components';
 import { PageEvent } from 'typedoc/dist/lib/output/events';
-import { JSDOM } from 'jsdom';
 import { basename } from 'path';
 
 /**
@@ -27,9 +26,6 @@ export class ExtrasPlugin extends RendererComponent {
     }
 
     private onRendererEndPage(page: PageEvent) {
-        const dom = new JSDOM(page.contents);
-        const document = dom.window.document;
-
         const noFavicon = this.application.options.getValue('noFavicon') as boolean;
         const favicon = basename(this.application.options.getValue('favicon') as string);
         const hideDate = this.application.options.getValue('hideDate') as boolean;
@@ -37,23 +33,28 @@ export class ExtrasPlugin extends RendererComponent {
 
         // Add icon.
         if (!noFavicon) {
-            const head = document.querySelector('head');
             const faviconUrl = makeRelativeToRoot(page.url, favicon);
-            head.innerHTML += `<link rel="icon" href="${faviconUrl}" />`;
+            page.contents = page.contents.replace('</head>',
+                '\t' +
+                `<link rel="icon" href="${faviconUrl}" />` +
+                '\n' +
+                '</head>');
         }
 
         // Add generation date and/or time.
         if (!this.application.options.getValue('hideGenerator') && (!hideDate || !hideTime)) {
-            const p = document.querySelector('div.container.tsd-generator > p');
             const now = new Date();
             const date = ` the ${now.toLocaleDateString()}`
             const time = ` at ${now.toLocaleTimeString()}`;
 
-            p.innerHTML += ',';
-            if (!hideDate) p.innerHTML += date;
-            if (!hideTime) p.innerHTML += time;
-        }
+            let appended = ',';
+            if (!hideDate) appended += date;
+            if (!hideTime) appended += time;
 
-        page.contents = dom.serialize();
+            page.contents = page.contents.replace(/(<p>Generated using.*TypeDoc.*)(<\/p>)/,
+                '$1' +      // Start of <p>
+                appended +  // Date and/or time
+                '$2');      // End of <p>
+        }
     }
 }
