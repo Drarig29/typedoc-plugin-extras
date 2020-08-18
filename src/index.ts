@@ -44,9 +44,10 @@ export function load(host: PluginHost) {
         const faviconPath = app.options.getValue('favicon') as string;
         const workingDir = process.cwd();
         const outDir = app.options.getValue('out') || './docs';
-
-        const inputFavicon = join(workingDir, faviconPath);
-        const outputFavicon = join(workingDir, outDir, basename(faviconPath));
+        const inputFavicon = (faviconPath.indexOf(workingDir)) ?
+            join(workingDir, faviconPath) : faviconPath;
+        const outputFavicon = (outDir.indexOf(workingDir) == -1) ?
+            join(workingDir, outDir, basename(faviconPath)) : join(outDir, basename(faviconPath));
 
         copyFileSync(inputFavicon, outputFavicon);
     });
