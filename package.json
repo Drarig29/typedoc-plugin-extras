@@ -33,8 +33,8 @@
         "typedoc": ">=0.16.0"
     },
     "devDependencies": {
-        "@types/node": "^13.7.5",
-        "typedoc": "^0.17.8",
-        "typescript": "^3.8.3"
+        "@types/node": "^15.0.2",
+        "typedoc": "^0.20.36",
+        "typescript": "^4.2.4"
     }
 }
