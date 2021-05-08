@@ -9,7 +9,7 @@ A plugin for [TypeDoc](https://github.com/TypeStrong/typedoc) that adds extras t
 
 **No date/time will be added if `--hideGenerator` is set (because the footer wouldn't exist).**
 
-Feel free to ask for another extras or to make a PR 😉
+Feel free to ask for another extra or to make a PR 😉
 
 [![npm](https://img.shields.io/npm/v/typedoc-plugin-extras.svg)](https://www.npmjs.com/package/typedoc-plugin-extras)
 
@@ -20,7 +20,7 @@ Feel free to ask for another extras or to make a PR 😉
 ## Installation
 
 ```bash
-npm install --save-dev typedoc typedoc-plugin-extras
+npm install --save-dev typedoc-plugin-extras
 ```
 
 ## Usage
