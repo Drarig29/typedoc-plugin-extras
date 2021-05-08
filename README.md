@@ -45,6 +45,30 @@ The following arguments can be used in addition to the default [TypeDoc argument
 **Note:** Favicon, date and time are enabled by default.
 When favicon is enabled, its file is copied into the documentation's output directory (`--out`).
 
+## Testing
+
+To test this plugin, you can generate TypeDoc documentation _for this plugin_.
+
+First, link the package with npm:
+
+```bash
+npm link
+```
+
+Then, you can generate the documentation with the plugin (from source):
+
+```bash
+npm run test
+```
+
+If you want, you can watch your changes with:
+
+```bash
+npm start
+```
+
+You will need to generate the documentation each time.
+
 ## License
 
 [MIT](https://github.com/Drarig29/typedoc-plugin-extras/blob/master/LICENSE)

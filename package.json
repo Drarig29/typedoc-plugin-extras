@@ -7,7 +7,8 @@
         "dist/"
     ],
     "scripts": {
-        "start": "npx typedoc --plugin typedoc-plugin-extras",
+        "start": "tsc --watch",
+        "test": "npx typedoc --plugin typedoc-plugin-extras src/index.ts",
         "build": "tsc",
         "prepublishOnly": "npm run build"
     },
