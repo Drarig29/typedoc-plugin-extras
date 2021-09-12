@@ -49,8 +49,10 @@ The following arguments can be used in addition to the default [TypeDoc argument
   Appends the time of generation in the footer.<br>
   Default: `false`
 
-**Note:** All extras are disabled by default, they are now opt-in.
-When favicon is enabled, its file is copied into the documentation's output directory (`--out`).
+**Note:**
+
+- All extras are disabled by default, they are now opt-in.
+- When favicon is enabled, its file is copied into the documentation's output directory (`--out`).
 
 ## Testing
 
