@@ -15,33 +15,32 @@ export class ExtrasPlugin extends RendererComponent {
         if (!page.contents)
             return
 
-        const favicon = basename(this.application.options.getValue('favicon') as string);
-        const noFavicon = this.application.options.getValue('noFavicon') as boolean;
-        const hideDate = this.application.options.getValue('hideDate') as boolean;
-        const hideTime = this.application.options.getValue('hideTime') as boolean;
         const hideGenerator = this.application.options.getValue('hideGenerator') as boolean;
-        const typedocVersion = this.application.options.getValue('typedocVersion') as boolean;
+        const favicon = basename(this.application.options.getValue('favicon') as string);
+        const footerDate = this.application.options.getValue('footerDate') as boolean;
+        const footerTime = this.application.options.getValue('footerTime') as boolean;
+        const footerTypedocVersion = this.application.options.getValue('footerTypedocVersion') as boolean;
 
         // Add icon.
-        if (!noFavicon) {
+        if (favicon) {
             const faviconUrl = makeRelativeToRoot(page.url, favicon);
             page.contents = appendFavicon(page.contents, faviconUrl);
         }
 
         // Add TypeDoc version.
-        if (typedocVersion) {
+        if (footerTypedocVersion) {
             page.contents = appendToFooter(page.contents, ` version ${TYPEDOC_VERSION}`);
         }
 
         // Add generation date and/or time.
-        if (!hideGenerator && (!hideDate || !hideTime)) {
+        if (!hideGenerator && (footerDate || footerTime)) {
             const now = new Date();
             const date = ` the ${now.toLocaleDateString()}`
             const time = ` at ${now.toLocaleTimeString()}`;
 
             let dateTime = ',';
-            if (!hideDate) dateTime += date;
-            if (!hideTime) dateTime += time;
+            if (footerDate) dateTime += date;
+            if (footerTime) dateTime += time;
 
             page.contents = appendToFooter(page.contents, dateTime);
         }

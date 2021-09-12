@@ -12,43 +12,36 @@ export function load(host: PluginHost) {
         name: 'favicon',
         help: 'Extras Plugin: Specify the name of the favicon file.',
         type: ParameterType.String,
-        defaultValue: 'public/favicon.ico'
+        defaultValue: undefined
     });
 
     app.options.addDeclaration({
-        name: 'noFavicon',
-        help: 'Extras Plugin: Disable the favicon.',
-        type: ParameterType.Boolean,
-        defaultValue: false
-    });
-
-    app.options.addDeclaration({
-        name: 'typedocVersion',
+        name: 'footerTypedocVersion',
         help: 'Extras Plugin: Appends the TypeDoc version in the footer.',
         type: ParameterType.Boolean,
         defaultValue: false
     })
 
     app.options.addDeclaration({
-        name: 'hideDate',
-        help: 'Extras Plugin: Hide the date of generation at the end of documentation pages.',
+        name: 'footerDate',
+        help: 'Extras Plugin: Appends the date of generation in the footer.',
         type: ParameterType.Boolean,
         defaultValue: false
     });
 
     app.options.addDeclaration({
-        name: 'hideTime',
-        help: 'Extras Plugin: Hide the time of generation at the end of documentation pages.',
+        name: 'footerTime',
+        help: 'Extras Plugin: Appends the time of generation in the footer.',
         type: ParameterType.Boolean,
         defaultValue: false
     });
 
     app.renderer.addComponent('extras', new ExtrasPlugin(app.renderer));
     app.renderer.once(RendererEvent.END, () => {
-        const noFavicon = app.options.getValue('noFavicon') as boolean;
-        if (noFavicon) return;
+        const faviconPath = app.options.getValue('favicon') as string | undefined;
+        if (!faviconPath)
+            return
 
-        const faviconPath = app.options.getValue('favicon') as string;
         const workingDir = process.cwd();
         const outDir = app.options.getValue('out') || './docs';
 

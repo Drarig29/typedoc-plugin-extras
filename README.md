@@ -4,8 +4,8 @@
 
 A plugin for [TypeDoc](https://github.com/TypeStrong/typedoc) that adds extras to the generated documentation (favicon and date/time of generation).
 
-* It can find the `<head>` of the document and append a favicon to it.
-* It can also add date/time of generation after "Generated using TypeDoc" in the footer (see Example).
+- It can find the `<head>` of the document and append a favicon to it.
+- It can also add date/time of generation after "Generated using TypeDoc" in the footer (see Example).
 
 **No date/time will be added if `--hideGenerator` is set (because the footer wouldn't exist).**
 
@@ -34,15 +34,22 @@ $ npx typedoc --plugin typedoc-plugin-extras [args]
 The following arguments can be used in addition to the default [TypeDoc arguments](https://github.com/TypeStrong/typedoc#arguments).
 
 - `--favicon`<br>
-  Specify the name of the favicon file. Default: `'public/favicon.ico'`
-- `--noFavicon`<br>
-  Disable the favicon.
-- `--hideDate`<br>
-  Hide the date at the end of documentation pages.
-- `--hideTime`<br>
-  Hide the time at the end of documentation pages.
+  Specify the name of the favicon file.<br>
+  Example: `public/favicon.ico`
 
-**Note:** Favicon, date and time are enabled by default.
+- `--footerTypedocVersion`<br>
+  Appends the TypeDoc version in the footer.<br>
+  Default: `false`
+
+- `--footerDate`<br>
+  Appends the date of generation in the footer.<br>
+  Default: `false`
+
+- `--footerTime`<br>
+  Appends the time of generation in the footer.<br>
+  Default: `false`
+
+**Note:** All extras are disabled by default, they are now opt-in.
 When favicon is enabled, its file is copied into the documentation's output directory (`--out`).
 
 ## Testing
