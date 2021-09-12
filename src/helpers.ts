@@ -30,14 +30,14 @@ export function appendFavicon(html: string, url: string): string {
 }
 
 /**
- * Appends date and/or time after "Generated using TypeDoc".
+ * Appends a string value after "Generated using TypeDoc".
  * @param html HTML string to append to.
- * @param dateTime A string containing date and/or time.
+ * @param value A string value.
  */
-export function appendDateTime(html: string, dateTime: string): string {
+export function appendToFooter(html: string, value: string): string {
     return html.replace(/(<p>Generated using.*TypeDoc.*)(<\/p>)/,
         '$1' + // Start of <p>
-        dateTime +
+        value +
         '$2' // End of <p>
     );
 }

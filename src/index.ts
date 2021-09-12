@@ -23,6 +23,13 @@ export function load(host: PluginHost) {
     });
 
     app.options.addDeclaration({
+        name: 'typedocVersion',
+        help: 'Extras Plugin: Appends the TypeDoc version in the footer.',
+        type: ParameterType.Boolean,
+        defaultValue: false
+    })
+
+    app.options.addDeclaration({
         name: 'hideDate',
         help: 'Extras Plugin: Hide the date of generation at the end of documentation pages.',
         type: ParameterType.Boolean,
@@ -44,7 +51,7 @@ export function load(host: PluginHost) {
         const faviconPath = app.options.getValue('favicon') as string;
         const workingDir = process.cwd();
         const outDir = app.options.getValue('out') || './docs';
-        
+
         const inputFavicon = (faviconPath.indexOf(workingDir) === -1) ?
             join(workingDir, faviconPath) : faviconPath;
 
