@@ -1,13 +1,10 @@
-import { Application } from 'typedoc';
-import { PluginHost, ParameterType } from 'typedoc/dist/lib/utils';
+import { Application, ParameterType } from 'typedoc';
 import { ExtrasPlugin } from './plugin';
 import { copyFileSync } from 'fs';
 import { join, basename } from 'path';
 import { RendererEvent } from 'typedoc/dist/lib/output/events';
 
-export function load(host: PluginHost) {
-    const app: Application = host.application;
-
+export function load(app: Application) {
     app.options.addDeclaration({
         name: 'favicon',
         help: 'Extras Plugin: Specify the name of the favicon file.',
