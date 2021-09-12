@@ -10,6 +10,9 @@ export class ExtrasPlugin extends RendererComponent {
     }
 
     private onRendererEndPage(page: PageEvent) {
+        if (!page.contents)
+            return
+
         const noFavicon = this.application.options.getValue('noFavicon') as boolean;
         const favicon = basename(this.application.options.getValue('favicon') as string);
         const hideDate = this.application.options.getValue('hideDate') as boolean;
