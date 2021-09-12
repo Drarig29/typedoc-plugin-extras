@@ -3,7 +3,7 @@ import { RendererComponent } from 'typedoc/dist/lib/output/components';
 import { PageEvent } from 'typedoc/dist/lib/output/events';
 import { basename } from 'path';
 
-const TYPEDOC_VERSION = require('typedoc/package.json').version;
+// const TYPEDOC_VERSION = require('typedoc/package.json').version;
 
 export class ExtrasPlugin extends RendererComponent {
 
@@ -29,7 +29,7 @@ export class ExtrasPlugin extends RendererComponent {
 
         // Add TypeDoc version.
         if (footerTypedocVersion) {
-            page.contents = appendToFooter(page.contents, ` version ${TYPEDOC_VERSION}`);
+            // page.contents = appendToFooter(page.contents, ` version ${TYPEDOC_VERSION}`);
         }
 
         // Add generation date and/or time.
