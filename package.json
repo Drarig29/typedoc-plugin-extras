@@ -8,7 +8,7 @@
     ],
     "scripts": {
         "start": "tsc --watch",
-        "test": "npx typedoc --plugin typedoc-plugin-extras src/index.ts",
+        "test": "typedoc --plugin typedoc-plugin-extras src/index.ts",
         "build": "tsc",
         "prepublishOnly": "npm run build"
     },
