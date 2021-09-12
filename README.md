@@ -49,25 +49,23 @@ When favicon is enabled, its file is copied into the documentation's output dire
 
 To test this plugin, you can generate TypeDoc documentation _for this plugin_.
 
-First, link the package with npm:
+To do this, you'll first need to build the plugin:
+
+```bash
+npm run build
+```
+
+Then, link the package to have it in the local `node_modules`:
 
 ```bash
 npm link
 ```
 
-Then, you can generate the documentation with the plugin (from source):
+You can now generate the documentation with the plugin (from the source):
 
 ```bash
 npm run test
 ```
-
-If you want, you can watch your changes with:
-
-```bash
-npm start
-```
-
-You will need to generate the documentation each time.
 
 ## License
 
