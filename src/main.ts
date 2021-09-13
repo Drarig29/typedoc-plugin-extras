@@ -1,8 +1,9 @@
-import { Application, ParameterType } from 'typedoc';
-import { ExtrasPlugin } from './plugin';
-import { copyFileSync } from 'fs';
+import { Application, ParameterType, PageEvent, RendererEvent } from 'typedoc';
+import { appendFavicon, appendToFooter, makeRelativeToRoot } from './helpers';
 import { join, basename } from 'path';
-import { RendererEvent } from 'typedoc/dist/lib/output/events';
+import { copyFileSync } from 'fs';
+
+// const TYPEDOC_VERSION = require('typedoc/package.json').version;
 
 export function load(app: Application) {
     app.options.addDeclaration({
@@ -33,7 +34,42 @@ export function load(app: Application) {
         defaultValue: false
     });
 
-    app.renderer.addComponent('extras', new ExtrasPlugin(app.renderer));
+    app.renderer.on(PageEvent.END, (page: PageEvent) => {
+        if (!page.contents)
+            return
+
+        const hideGenerator = app.options.getValue('hideGenerator') as boolean;
+        const favicon = basename(app.options.getValue('favicon') as string);
+        const footerDate = app.options.getValue('footerDate') as boolean;
+        const footerTime = app.options.getValue('footerTime') as boolean;
+        const footerTypedocVersion = app.options.getValue('footerTypedocVersion') as boolean;
+
+        // Add icon.
+        if (favicon) {
+            const faviconUrl = makeRelativeToRoot(page.url, favicon);
+            page.contents = appendFavicon(page.contents, faviconUrl);
+        }
+
+        // Add TypeDoc version.
+        if (footerTypedocVersion) {
+            // FIXME: can't access package.json in esm
+            // page.contents = appendToFooter(page.contents, ` version ${TYPEDOC_VERSION}`);
+        }
+
+        // Add generation date and/or time.
+        if (!hideGenerator && (footerDate || footerTime)) {
+            const now = new Date();
+            const date = ` the ${now.toLocaleDateString()}`
+            const time = ` at ${now.toLocaleTimeString()}`;
+
+            let dateTime = ',';
+            if (footerDate) dateTime += date;
+            if (footerTime) dateTime += time;
+
+            page.contents = appendToFooter(page.contents, dateTime);
+        }
+    });
+
     app.renderer.once(RendererEvent.END, () => {
         const faviconPath = app.options.getValue('favicon') as string | undefined;
         if (!faviconPath)
