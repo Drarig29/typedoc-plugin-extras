@@ -5,6 +5,19 @@ import { copyFileSync } from 'fs';
 
 const TYPEDOC_VERSION = Application.VERSION;
 
+const pluginOptions = (app: Application) => ({
+    options: () => ({
+        outDir: app.options.getValue('out') as string | undefined,
+        hideGenerator: app.options.getValue('hideGenerator') as boolean,
+        faviconPath: app.options.getValue('favicon') as string | undefined,
+        footerDate: app.options.getValue('footerDate') as boolean,
+        footerTime: app.options.getValue('footerTime') as boolean,
+        footerTypedocVersion: app.options.getValue('footerTypedocVersion') as boolean,
+    })
+})
+
+type PluginOptions = ReturnType<typeof pluginOptions>
+
 export function load(app: Application) {
     app.options.addDeclaration({
         name: 'favicon',
@@ -34,60 +47,57 @@ export function load(app: Application) {
         defaultValue: false
     });
 
-    const pluginOptions = () => ({
-        faviconPath: app.options.getValue('favicon') as string | undefined,
-        hideGenerator: app.options.getValue('hideGenerator') as boolean,
-        footerDate: app.options.getValue('footerDate') as boolean,
-        footerTime: app.options.getValue('footerTime') as boolean,
-        footerTypedocVersion: app.options.getValue('footerTypedocVersion') as boolean,
-    })
+    const options = pluginOptions(app)
 
-    app.renderer.on(PageEvent.END, (page: PageEvent) => {
-        if (!page.contents)
-            return;
+    app.renderer.on(PageEvent.END, onPageRendered.bind(options));
+    app.renderer.once(RendererEvent.END, onRenderFinished.bind(options));
+}
 
-        const options = pluginOptions()
+function onPageRendered(this: PluginOptions, page: PageEvent) {
+    if (!page.contents)
+        return;
 
-        // Add icon.
-        if (options.faviconPath) {
-            const faviconFilename = basename(options.faviconPath);
-            const faviconUrl = makeRelativeToRoot(page.url, faviconFilename);
-            page.contents = appendFavicon(page.contents, faviconUrl);
-        }
+    const options = this.options()
 
-        // Add TypeDoc version.
-        if (options.footerTypedocVersion) {
-            page.contents = appendToFooter(page.contents, ` version ${TYPEDOC_VERSION}`);
-        }
+    // Add icon.
+    if (options.faviconPath) {
+        const faviconFilename = basename(options.faviconPath);
+        const faviconUrl = makeRelativeToRoot(page.url, faviconFilename);
+        page.contents = appendFavicon(page.contents, faviconUrl);
+    }
 
-        // Add generation date and/or time.
-        if (!options.hideGenerator && (options.footerDate || options.footerTime)) {
-            const now = new Date();
-            const date = ` the ${now.toLocaleDateString()}`
-            const time = ` at ${now.toLocaleTimeString()}`;
+    // Add TypeDoc version.
+    if (options.footerTypedocVersion) {
+        page.contents = appendToFooter(page.contents, ` version ${TYPEDOC_VERSION}`);
+    }
 
-            let dateTime = ',';
-            if (options.footerDate) dateTime += date;
-            if (options.footerTime) dateTime += time;
+    // Add generation date and/or time.
+    if (!options.hideGenerator && (options.footerDate || options.footerTime)) {
+        const now = new Date();
+        const date = ` the ${now.toLocaleDateString()}`
+        const time = ` at ${now.toLocaleTimeString()}`;
 
-            page.contents = appendToFooter(page.contents, dateTime);
-        }
-    });
+        let dateTime = ',';
+        if (options.footerDate) dateTime += date;
+        if (options.footerTime) dateTime += time;
 
-    app.renderer.once(RendererEvent.END, () => {
-        const options = pluginOptions()
-        if (!options.faviconPath)
-            return;
+        page.contents = appendToFooter(page.contents, dateTime);
+    }
+}
 
-        const workingDir = process.cwd();
-        const outDir = app.options.getValue('out') || './docs';
+function onRenderFinished(this: PluginOptions) {
+    const options = this.options()
+    if (!options.faviconPath)
+        return;
 
-        const inputFavicon = (options.faviconPath.indexOf(workingDir) === -1) ?
-            join(workingDir, options.faviconPath) : options.faviconPath;
+    const workingDir = process.cwd();
+    const outDir = options.outDir || './docs';
 
-        const outputFavicon = (outDir.indexOf(workingDir) === -1) ?
-            join(workingDir, outDir, basename(options.faviconPath)) : join(outDir, basename(options.faviconPath));
+    const inputFavicon = (options.faviconPath.indexOf(workingDir) === -1) ?
+        join(workingDir, options.faviconPath) : options.faviconPath;
 
-        copyFileSync(inputFavicon, outputFavicon);
-    });
+    const outputFavicon = (outDir.indexOf(workingDir) === -1) ?
+        join(workingDir, outDir, basename(options.faviconPath)) : join(outDir, basename(options.faviconPath));
+
+    copyFileSync(inputFavicon, outputFavicon);
 }
