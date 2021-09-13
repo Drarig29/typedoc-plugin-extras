@@ -18,7 +18,7 @@ export function load(app: Application) {
         help: 'Extras Plugin: Appends the TypeDoc version in the footer.',
         type: ParameterType.Boolean,
         defaultValue: false
-    })
+    });
 
     app.options.addDeclaration({
         name: 'footerDate',
@@ -34,54 +34,59 @@ export function load(app: Application) {
         defaultValue: false
     });
 
+    const pluginOptions = () => ({
+        faviconPath: app.options.getValue('favicon') as string | undefined,
+        hideGenerator: app.options.getValue('hideGenerator') as boolean,
+        footerDate: app.options.getValue('footerDate') as boolean,
+        footerTime: app.options.getValue('footerTime') as boolean,
+        footerTypedocVersion: app.options.getValue('footerTypedocVersion') as boolean,
+    })
+
     app.renderer.on(PageEvent.END, (page: PageEvent) => {
         if (!page.contents)
-            return
+            return;
 
-        const hideGenerator = app.options.getValue('hideGenerator') as boolean;
-        const favicon = basename(app.options.getValue('favicon') as string);
-        const footerDate = app.options.getValue('footerDate') as boolean;
-        const footerTime = app.options.getValue('footerTime') as boolean;
-        const footerTypedocVersion = app.options.getValue('footerTypedocVersion') as boolean;
+        const options = pluginOptions()
 
         // Add icon.
-        if (favicon) {
-            const faviconUrl = makeRelativeToRoot(page.url, favicon);
+        if (options.faviconPath) {
+            const faviconFilename = basename(options.faviconPath);
+            const faviconUrl = makeRelativeToRoot(page.url, faviconFilename);
             page.contents = appendFavicon(page.contents, faviconUrl);
         }
 
         // Add TypeDoc version.
-        if (footerTypedocVersion) {
+        if (options.footerTypedocVersion) {
             page.contents = appendToFooter(page.contents, ` version ${TYPEDOC_VERSION}`);
         }
 
         // Add generation date and/or time.
-        if (!hideGenerator && (footerDate || footerTime)) {
+        if (!options.hideGenerator && (options.footerDate || options.footerTime)) {
             const now = new Date();
             const date = ` the ${now.toLocaleDateString()}`
             const time = ` at ${now.toLocaleTimeString()}`;
 
             let dateTime = ',';
-            if (footerDate) dateTime += date;
-            if (footerTime) dateTime += time;
+            if (options.footerDate) dateTime += date;
+            if (options.footerTime) dateTime += time;
 
             page.contents = appendToFooter(page.contents, dateTime);
         }
     });
 
     app.renderer.once(RendererEvent.END, () => {
-        const faviconPath = app.options.getValue('favicon') as string | undefined;
-        if (!faviconPath)
-            return
+        const options = pluginOptions()
+        if (!options.faviconPath)
+            return;
 
         const workingDir = process.cwd();
         const outDir = app.options.getValue('out') || './docs';
 
-        const inputFavicon = (faviconPath.indexOf(workingDir) === -1) ?
-            join(workingDir, faviconPath) : faviconPath;
+        const inputFavicon = (options.faviconPath.indexOf(workingDir) === -1) ?
+            join(workingDir, options.faviconPath) : options.faviconPath;
 
         const outputFavicon = (outDir.indexOf(workingDir) === -1) ?
-            join(workingDir, outDir, basename(faviconPath)) : join(outDir, basename(faviconPath));
+            join(workingDir, outDir, basename(options.faviconPath)) : join(outDir, basename(options.faviconPath));
 
         copyFileSync(inputFavicon, outputFavicon);
     });
