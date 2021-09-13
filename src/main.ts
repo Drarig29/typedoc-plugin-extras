@@ -87,17 +87,18 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
 
 function onRenderFinished(this: PluginOptions) {
     const options = this.options()
-    if (!options.faviconPath)
-        return;
 
-    const workingDir = process.cwd();
-    const outDir = options.outDir || './docs';
+    // Copy favicon to output directory.
+    if (options.faviconPath) {
+        const workingDir = process.cwd();
+        const outDir = options.outDir || './docs';
 
-    const inputFavicon = (options.faviconPath.indexOf(workingDir) === -1) ?
-        join(workingDir, options.faviconPath) : options.faviconPath;
+        const inputFavicon = (options.faviconPath.indexOf(workingDir) === -1) ?
+            join(workingDir, options.faviconPath) : options.faviconPath;
 
-    const outputFavicon = (outDir.indexOf(workingDir) === -1) ?
-        join(workingDir, outDir, basename(options.faviconPath)) : join(outDir, basename(options.faviconPath));
+        const outputFavicon = (outDir.indexOf(workingDir) === -1) ?
+            join(workingDir, outDir, basename(options.faviconPath)) : join(outDir, basename(options.faviconPath));
 
-    copyFileSync(inputFavicon, outputFavicon);
+        copyFileSync(inputFavicon, outputFavicon);
+    }
 }
