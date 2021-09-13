@@ -2,15 +2,15 @@
     "name": "typedoc-plugin-extras",
     "version": "2.1.0",
     "description": "A plugin for TypeDoc that adds extras to the generated documentation (favicon and date/time of generation).",
-    "main": "./dist/index.js",
-    "exports": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "main": "./dist/main.js",
+    "exports": "./dist/main.js",
+    "types": "./dist/main.d.ts",
     "files": [
         "dist/"
     ],
     "scripts": {
         "start": "tsc --watch",
-        "test": "typedoc --plugin typedoc-plugin-extras --favicon public/favicon.ico --footerDate --footerTime --footerTypedocVersion src/index.ts",
+        "test": "typedoc --plugin typedoc-plugin-extras --favicon public/favicon.ico --footerDate --footerTime --footerTypedocVersion src/main.ts",
         "build": "tsc",
         "prepublishOnly": "npm run build"
     },
