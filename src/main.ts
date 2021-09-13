@@ -3,7 +3,7 @@ import { appendFavicon, appendToFooter, makeRelativeToRoot } from './helpers';
 import { join, basename } from 'path';
 import { copyFileSync } from 'fs';
 
-// const TYPEDOC_VERSION = require('typedoc/package.json').version;
+const TYPEDOC_VERSION = Application.VERSION;
 
 export function load(app: Application) {
     app.options.addDeclaration({
@@ -52,8 +52,7 @@ export function load(app: Application) {
 
         // Add TypeDoc version.
         if (footerTypedocVersion) {
-            // FIXME: can't access package.json in esm
-            // page.contents = appendToFooter(page.contents, ` version ${TYPEDOC_VERSION}`);
+            page.contents = appendToFooter(page.contents, ` version ${TYPEDOC_VERSION}`);
         }
 
         // Add generation date and/or time.
