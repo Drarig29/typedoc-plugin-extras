@@ -9,7 +9,7 @@ const pluginOptions = (app: Application) => ({
     options: () => ({
         outDir: app.options.getValue('out') as string | undefined,
         hideGenerator: app.options.getValue('hideGenerator') as boolean,
-        faviconPath: app.options.getValue('favicon') as string | undefined,
+        favicon: app.options.getValue('favicon') as string | undefined,
         footerDate: app.options.getValue('footerDate') as boolean,
         footerTime: app.options.getValue('footerTime') as boolean,
         footerTypedocVersion: app.options.getValue('footerTypedocVersion') as boolean,
@@ -60,9 +60,11 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
     const options = this.options()
 
     // Add icon.
-    if (options.faviconPath) {
-        const faviconFilename = basename(options.faviconPath);
-        const faviconUrl = makeRelativeToRoot(page.url, faviconFilename);
+    if (options.favicon) {
+        const faviconUrl = options.favicon.toLowerCase().startsWith('http')
+          ? options.favicon
+          : makeRelativeToRoot(page.url, basename(options.favicon));
+
         page.contents = appendFavicon(page.contents, faviconUrl);
     }
 
@@ -89,15 +91,15 @@ function onRenderFinished(this: PluginOptions) {
     const options = this.options()
 
     // Copy favicon to output directory.
-    if (options.faviconPath) {
+    if (options.favicon && !options.favicon.toLowerCase().startsWith('http')) {
         const workingDir = process.cwd();
         const outDir = options.outDir || './docs';
 
-        const inputFavicon = (options.faviconPath.indexOf(workingDir) === -1) ?
-            join(workingDir, options.faviconPath) : options.faviconPath;
+        const inputFavicon = (options.favicon.indexOf(workingDir) === -1) ?
+            join(workingDir, options.favicon) : options.favicon;
 
         const outputFavicon = (outDir.indexOf(workingDir) === -1) ?
-            join(workingDir, outDir, basename(options.faviconPath)) : join(outDir, basename(options.faviconPath));
+            join(workingDir, outDir, basename(options.favicon)) : join(outDir, basename(options.favicon));
 
         copyFileSync(inputFavicon, outputFavicon);
     }
