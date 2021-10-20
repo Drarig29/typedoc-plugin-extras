@@ -34,7 +34,7 @@ $ npx typedoc --plugin typedoc-plugin-extras [args]
 The following arguments can be used in addition to the default [TypeDoc arguments](https://github.com/TypeStrong/typedoc#arguments).
 
 - `--favicon`<br>
-  Specify the name of the favicon file.<br>
+  Specify the name or URL of the favicon file.<br>
   Example: `public/favicon.ico`
 
 - `--footerTypedocVersion`<br>
