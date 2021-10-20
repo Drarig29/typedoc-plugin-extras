@@ -43,5 +43,5 @@ export function appendToFooter(html: string, value: string): string {
 }
 
 export function isUrl(url: string): boolean {
-    return /^https?\/\//i.test(url);
+    return /^https?:\/\//i.test(url);
 }
