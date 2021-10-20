@@ -1,5 +1,5 @@
 import { Application, ParameterType, PageEvent, RendererEvent } from 'typedoc';
-import { appendFavicon, appendToFooter, makeRelativeToRoot } from './helpers';
+import { appendFavicon, appendToFooter, makeRelativeToRoot, isUrl } from './helpers';
 import { join, basename } from 'path';
 import { copyFileSync } from 'fs';
 
@@ -61,11 +61,11 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
 
     // Add icon.
     if (options.favicon) {
-        const faviconUrl = options.favicon.toLowerCase().startsWith('http')
+        const favicon = isUrl(options.favicon)
           ? options.favicon
           : makeRelativeToRoot(page.url, basename(options.favicon));
 
-        page.contents = appendFavicon(page.contents, faviconUrl);
+        page.contents = appendFavicon(page.contents, favicon);
     }
 
     // Add TypeDoc version.
@@ -91,7 +91,7 @@ function onRenderFinished(this: PluginOptions) {
     const options = this.options()
 
     // Copy favicon to output directory.
-    if (options.favicon && !options.favicon.toLowerCase().startsWith('http')) {
+    if (options.favicon && !isUrl(options.favicon)) {
         const workingDir = process.cwd();
         const outDir = options.outDir || './docs';
 

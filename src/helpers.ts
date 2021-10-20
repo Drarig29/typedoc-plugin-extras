@@ -41,3 +41,7 @@ export function appendToFooter(html: string, value: string): string {
         '$2' // End of <p>
     );
 }
+
+export function isUrl(url: string): boolean {
+    return /^https?\/\//i.test(url);
+}
