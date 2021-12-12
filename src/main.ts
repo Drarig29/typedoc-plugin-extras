@@ -13,10 +13,12 @@ const pluginOptions = (app: Application) => ({
         footerDate: app.options.getValue('footerDate') as boolean,
         footerTime: app.options.getValue('footerTime') as boolean,
         footerTypedocVersion: app.options.getValue('footerTypedocVersion') as boolean,
-    })
-})
+        customTitle: app.options.getValue('customTitle') as string | undefined,
+        customTitleLink: app.options.getValue('customTitleLink') as string | undefined,
+    }),
+});
 
-type PluginOptions = ReturnType<typeof pluginOptions>
+type PluginOptions = ReturnType<typeof pluginOptions>;
 
 export function load(app: Application) {
     app.options.addDeclaration({
@@ -47,7 +49,21 @@ export function load(app: Application) {
         defaultValue: false
     });
 
-    const options = pluginOptions(app)
+    app.options.addDeclaration({
+        name: 'customTitle',
+        help: 'Extras Plugin: Specify a custom title, for the top-most title only.',
+        type: ParameterType.String,
+        defaultValue: undefined
+    });
+
+    app.options.addDeclaration({
+        name: 'customTitleLink',
+        help: 'Extras Plugin: Specify a custom link for the top-most title.',
+        type: ParameterType.String,
+        defaultValue: undefined
+    });
+
+    const options = pluginOptions(app);
 
     app.renderer.on(PageEvent.END, onPageRendered.bind(options));
     app.renderer.once(RendererEvent.END, onRenderFinished.bind(options));
@@ -57,7 +73,7 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
     if (!page.contents)
         return;
 
-    const options = this.options()
+    const options = this.options();
 
     // Add icon.
     if (options.favicon) {
@@ -76,7 +92,7 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
     // Add generation date and/or time.
     if (!options.hideGenerator && (options.footerDate || options.footerTime)) {
         const now = new Date();
-        const date = ` the ${now.toLocaleDateString()}`
+        const date = ` the ${now.toLocaleDateString()}`;
         const time = ` at ${now.toLocaleTimeString()}`;
 
         let dateTime = ',';
