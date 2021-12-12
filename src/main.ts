@@ -1,7 +1,14 @@
 import { Application, ParameterType, PageEvent, RendererEvent } from 'typedoc';
-import { appendFavicon, appendToFooter, makeRelativeToRoot, isUrl } from './helpers';
 import { join, basename } from 'path';
 import { copyFileSync } from 'fs';
+import {
+    appendFavicon,
+    appendToFooter,
+    makeRelativeToRoot,
+    isUrl,
+    replaceTopMostTitle,
+    replaceTopMostTitleLink
+} from './helpers';
 
 const TYPEDOC_VERSION = Application.VERSION;
 
@@ -78,8 +85,8 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
     // Add icon.
     if (options.favicon) {
         const favicon = isUrl(options.favicon)
-          ? options.favicon
-          : makeRelativeToRoot(page.url, basename(options.favicon));
+            ? options.favicon
+            : makeRelativeToRoot(page.url, basename(options.favicon));
 
         page.contents = appendFavicon(page.contents, favicon);
     }
@@ -100,6 +107,16 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
         if (options.footerTime) dateTime += time;
 
         page.contents = appendToFooter(page.contents, dateTime);
+    }
+
+    // Set custom title.
+    if (options.customTitle) {
+        page.contents = replaceTopMostTitle(page.contents, options.customTitle);
+    }
+
+    // Set custom title link.
+    if (options.customTitleLink) {
+        page.contents = replaceTopMostTitleLink(page.contents, options.customTitleLink);
     }
 }
 

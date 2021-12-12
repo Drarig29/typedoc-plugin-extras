@@ -45,3 +45,33 @@ export function appendToFooter(html: string, value: string): string {
 export function isUrl(url: string): boolean {
     return /^https?:\/\//i.test(url);
 }
+
+/**
+ * Replaces the top-most title text.
+ * @param html HTML string to replace into.
+ * @param title The new title to set.
+ */
+export function replaceTopMostTitle(html: string, title: string): string {
+    return html.replace(/(<a href=")([^"]*)(" class="title">)([^<]*)(<\/a>)/,
+        '$1' + // Start of <a>
+        '$2' + // The href link
+        '$3' + // The class
+        title +
+        '$5' // End of <a>
+    );
+}
+
+/**
+ * Replaces the top-most title link.
+ * @param html HTML string to replace into.
+ * @param link The new link to set.
+ */
+export function replaceTopMostTitleLink(html: string, link: string): string {
+    return html.replace(/(<a href=")([^"]*)(" class="title">)([^<]*)(<\/a>)/,
+        '$1' + // Start of <a>
+        link +
+        '$3' + // The class
+        '$4' + // The title
+        '$5' // End of <a>
+    );
+}
