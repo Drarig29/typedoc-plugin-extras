@@ -4,6 +4,7 @@
 
 A plugin for [TypeDoc](https://github.com/TypeStrong/typedoc) that adds extras to the generated documentation (favicon and date/time of generation).
 
+- It can set custom top-most title name and/or link
 - It can find the `<head>` of the document and append a favicon to it.
 - It can also add date/time of generation after "Generated using TypeDoc" in the footer (see Example).
 
@@ -32,6 +33,14 @@ $ npx typedoc --plugin typedoc-plugin-extras [args]
 ## Arguments
 
 The following arguments can be used in addition to the default [TypeDoc arguments](https://github.com/TypeStrong/typedoc#arguments).
+
+- `--customTitle`<br>
+  Specify a custom title, for the top-most title only.<br>
+  Example: `foo`
+
+- `--customTitleLink`<br>
+  Specify a custom link for the top-most title.<br>
+  Example: `https://parent-docs-site.com`
 
 - `--favicon`<br>
   Specify the name or URL of the favicon file.<br>
