@@ -42,6 +42,10 @@ export function appendToFooter(html: string, value: string): string {
     );
 }
 
+/**
+ * Determines whether a string is a URL.
+ * @param url The URL to check.
+ */
 export function isUrl(url: string): boolean {
     return /^https?:\/\//i.test(url);
 }
