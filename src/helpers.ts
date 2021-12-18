@@ -66,6 +66,19 @@ export function replaceTopMostTitle(html: string, title: string): string {
 }
 
 /**
+ * Replaces the meta description
+ * @param html HTML string to replace into.
+ * @param description The new description to set.
+ */
+export function replaceDescription(html: string, description: string): string {
+    return html.replace(/(<meta name="description" content=")([^<]*)("\/>)/,
+        '$1' + // Start of meta tag
+        description.replace('"', '') + // The description (also preventing escaping the attribute)
+        '$3' // end of meta tag
+    );
+}
+
+/**
  * Replaces the top-most title link.
  * @param html HTML string to replace into.
  * @param link The new link to set.
