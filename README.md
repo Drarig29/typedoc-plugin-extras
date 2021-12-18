@@ -42,6 +42,10 @@ The following arguments can be used in addition to the default [TypeDoc argument
   Specify a custom link for the top-most title.<br>
   Example: `https://parent-docs-site.com`
 
+- `--customDescription`<br>
+  Specify a custom meta description.<br>
+  Example: `A test description`
+
 - `--favicon`<br>
   Specify the name or URL of the favicon file.<br>
   Example: `public/favicon.ico`

@@ -7,7 +7,8 @@ import {
     makeRelativeToRoot,
     isUrl,
     replaceTopMostTitle,
-    replaceTopMostTitleLink
+    replaceTopMostTitleLink,
+    replaceDescription
 } from './helpers';
 
 const TYPEDOC_VERSION = Application.VERSION;
@@ -22,6 +23,7 @@ const pluginOptions = (app: Application) => ({
         footerTypedocVersion: app.options.getValue('footerTypedocVersion') as boolean,
         customTitle: app.options.getValue('customTitle') as string | undefined,
         customTitleLink: app.options.getValue('customTitleLink') as string | undefined,
+        customDescription: app.options.getValue('customDescription') as string | undefined
     }),
 });
 
@@ -66,6 +68,13 @@ export function load(app: Application) {
     app.options.addDeclaration({
         name: 'customTitleLink',
         help: 'Extras Plugin: Specify a custom link for the top-most title.',
+        type: ParameterType.String,
+        defaultValue: undefined
+    });
+
+    app.options.addDeclaration({
+        name: 'customDescription',
+        help: 'Extras Plugin: Specify a custom description for the website.',
         type: ParameterType.String,
         defaultValue: undefined
     });
@@ -117,6 +126,11 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
     // Set custom title link.
     if (options.customTitleLink) {
         page.contents = replaceTopMostTitleLink(page.contents, options.customTitleLink);
+    }
+
+    // Set custom description
+    if (options.customDescription) {
+        page.contents = replaceDescription(page.contents, options.customDescription);
     }
 }
 
