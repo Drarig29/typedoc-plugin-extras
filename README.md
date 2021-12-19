@@ -2,11 +2,12 @@
 
 **This plugin only works for HTML documentation.**
 
-A plugin for [TypeDoc](https://github.com/TypeStrong/typedoc) that adds extras to the generated documentation (favicon and date/time of generation).
+A plugin for [TypeDoc](https://github.com/TypeStrong/typedoc) which adds extras to the generated documentation.
 
-- It can set custom top-most title name and/or link
-- It can find the `<head>` of the document and append a favicon to it.
-- It can also add date/time of generation after "Generated using TypeDoc" in the footer (see Example).
+- It can set a custom top-most title name and/or link.
+- It can find the `<head>` of the documents and append a favicon to it.
+- It can also add date/time of generation after "Generated using TypeDoc" in the footer. (cf. the [example](https://github.com/Drarig29/typedoc-plugin-extras#example) below)
+- And more... (cf. the list of [arguments](https://github.com/Drarig29/typedoc-plugin-extras#arguments) below)
 
 **No date/time will be added if `--hideGenerator` is set (because the footer wouldn't exist).**
 
