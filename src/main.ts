@@ -108,7 +108,7 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
     // Add generation date and/or time.
     if (!options.hideGenerator && (options.footerDate || options.footerTime)) {
         const now = new Date();
-        const date = ` the ${now.toLocaleDateString()}`;
+        const date = ` on ${now.toLocaleDateString()}`;
         const time = ` at ${now.toLocaleTimeString()}`;
 
         let dateTime = ',';
