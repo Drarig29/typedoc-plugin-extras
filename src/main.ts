@@ -8,7 +8,8 @@ import {
     isUrl,
     replaceTopMostTitle,
     replaceTopMostTitleLink,
-    replaceDescription
+    replaceDescription,
+    setupNewlineInFooter
 } from './helpers';
 
 const TYPEDOC_VERSION = Application.VERSION;
@@ -105,17 +106,22 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
         page.contents = appendToFooter(page.contents, ` v${TYPEDOC_VERSION}`);
     }
 
+    page.contents = setupNewlineInFooter(page.contents);
+
     // Add generation date and/or time.
     if (!options.hideGenerator && (options.footerDate || options.footerTime)) {
         const now = new Date();
-        const date = ` on ${now.toLocaleDateString()}`;
-        const time = ` at ${now.toLocaleTimeString()}`;
 
-        let dateTime = ',';
-        if (options.footerDate) dateTime += date;
-        if (options.footerTime) dateTime += time;
+        let args = [];
+        if (options.footerDate) args.push("dateStyle: 'medium'");
+        if (options.footerTime) args.push("timeStyle: 'long'");
 
-        page.contents = appendToFooter(page.contents, dateTime);
+        const dateFormatter = `new Intl.DateTimeFormat(navigator.language, {${args.join(',')}})`
+
+        // Compute the generation date string on client-side.
+        const time = `<br><span id="generation-date"></span><script>window.GENERATION_DATE=${now.getTime()};document.getElementById('generation-date').innerText=${dateFormatter}.format(window.GENERATION_DATE)</script>`;
+
+        page.contents = appendToFooter(page.contents, time);
     }
 
     // Set custom title.

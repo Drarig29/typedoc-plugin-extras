@@ -35,10 +35,22 @@ export function appendFavicon(html: string, url: string): string {
  * @param value A string value.
  */
 export function appendToFooter(html: string, value: string): string {
-    return html.replace(/(<p>Generated using.*TypeDoc.*)(<\/p>)/,
+    return html.replace(/(<p.*>Generated using.*TypeDoc.*)(<\/p>)/,
         '$1' + // Start of <p>
         value +
         '$2' // End of <p>
+    );
+}
+
+/**
+ * Sets up the newline in footer.
+ * @param html HTML string to append to.
+ */
+ export function setupNewlineInFooter(html: string): string {
+    return html.replace(/(<p)(>Generated using.*TypeDoc)/,
+        '$1' + // Opening of <p> tag
+        ' style="line-height: 28px;"' + // Add spacing between the first line of footer and the date.
+        '$2' // End of "Generated using TypeDoc"
     );
 }
 
