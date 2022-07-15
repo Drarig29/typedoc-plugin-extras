@@ -78,17 +78,10 @@ To do this, you'll first need to build the plugin:
 npm run build
 ```
 
-Then, link the package to the current repo, to have it in the local `node_modules`:
-
-```bash
-npm link
-npm link typedoc-plugin-extras 
-```
-
 You can now generate the documentation with the plugin (from the source):
 
 ```bash
-npm run test
+npm test
 ```
 
 ## License

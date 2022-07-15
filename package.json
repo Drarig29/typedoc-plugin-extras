@@ -10,6 +10,7 @@
     ],
     "scripts": {
         "start": "tsc --watch",
+        "pretest": "npm link && npm link typedoc-plugin-extras",
         "test": "typedoc --plugin typedoc-plugin-extras --favicon public/favicon.ico --footerDate --footerTime --footerTypedocVersion src/main.ts",
         "build": "tsc",
         "prepublishOnly": "npm run build"
