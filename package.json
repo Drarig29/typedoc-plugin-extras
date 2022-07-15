@@ -1,6 +1,6 @@
 {
     "name": "typedoc-plugin-extras",
-    "version": "2.2.4",
+    "version": "2.2.5",
     "description": "A plugin for TypeDoc which adds extras to the generated documentation",
     "main": "./dist/main.js",
     "exports": "./dist/main.js",
