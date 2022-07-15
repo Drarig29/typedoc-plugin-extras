@@ -102,7 +102,7 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
 
     // Add TypeDoc version.
     if (options.footerTypedocVersion) {
-        page.contents = appendToFooter(page.contents, ` version ${TYPEDOC_VERSION}`);
+        page.contents = appendToFooter(page.contents, ` v${TYPEDOC_VERSION}`);
     }
 
     // Add generation date and/or time.
