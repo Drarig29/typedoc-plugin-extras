@@ -17,7 +17,7 @@ Feel free to ask for another extra or to make a PR 😉
 
 ## Example
 
-![Example](public/example.png)
+You can view an example documentation using this plugin here: https://drarig29.github.io/typedoc-plugin-extras/
 
 ## Installation
 
@@ -86,4 +86,4 @@ npm test
 
 ## License
 
-[MIT](https://github.com/Drarig29/typedoc-plugin-extras/blob/master/LICENSE)
+[MIT](https://github.com/Drarig29/typedoc-plugin-extras/blob/main/LICENSE)
