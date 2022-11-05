@@ -1,7 +1,7 @@
 {
     "name": "typedoc-plugin-extras",
     "version": "2.3.0",
-    "description": "A plugin for TypeDoc which adds extras to the generated documentation",
+    "description": "A TypeDoc plugin to add extras (favicon, generation date, etc.) to the output documentation",
     "main": "./dist/main.js",
     "exports": "./dist/main.js",
     "types": "./dist/main.d.ts",
