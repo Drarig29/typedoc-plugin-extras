@@ -19,7 +19,9 @@ Feel free to ask for another extra or to make a PR 😉
 
 ## Example
 
-You can view an example documentation using this plugin here:
+![example](./public/example.png)
+
+You also can view an example documentation using the plugin here:
 
 https://drarig29.github.io/typedoc-plugin-extras/
 
