@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       - name: Setup node
         uses: actions/setup-node@v3
         with:
@@ -27,7 +27,7 @@ jobs:
         run: npm link && npm link --install-links typedoc-plugin-extras
 
       - name: Build the docs
-        run: npx typedoc --plugin typedoc-plugin-extras --favicon public/favicon.ico --footerDate --footerTime --footerTypedocVersion src/main.ts --out docs
+        run: npx typedoc --plugin typedoc-plugin-extras --favicon public/favicon.ico --footerLastModified --footerTypedocVersion src/main.ts --out docs
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
