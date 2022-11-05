@@ -11,6 +11,8 @@ A plugin for [TypeDoc](https://github.com/TypeStrong/typedoc) which adds extras 
 
 **No date/time will be added if `--hideGenerator` is set (because the footer wouldn't exist).**
 
+All extras are disabled by default: they are opt-in.
+
 Feel free to ask for another extra or to make a PR 😉
 
 [![npm](https://img.shields.io/npm/v/typedoc-plugin-extras.svg)](https://www.npmjs.com/package/typedoc-plugin-extras)
@@ -48,25 +50,28 @@ The following arguments can be used in addition to the default [TypeDoc argument
   Example: `A test description`
 
 - `--favicon`<br>
-  Specify the name or URL of the favicon file.<br>
-  Example: `public/favicon.ico`
+  Specify the path or URL of the favicon file.<br>
+  Example: `public/favicon.ico`<br>
+  **Note:** If given a path, the favicon file is copied into the documentation's output directory (`--out`).
 
 - `--footerTypedocVersion`<br>
   Appends the TypeDoc version in the footer.<br>
   Default: `false`
 
-- `--footerDate`<br>
-  Appends the date of generation in the footer.<br>
-  Default: `false`
+- `--footerLastModified`<br>
+  Appends a "Last Modified" text in the footer (e.g. "Last modified 6 min. ago").<br>
+  Default: `false`<br>
+  **Note:** If specified, the `--footerDate` and `--footerTime` options are ignored.
 
-- `--footerTime`<br>
-  Appends the time of generation in the footer.<br>
-  Default: `false`
+- `--footerDate` (deprecated)<br>
+  Appends the date of generation in the footer (e.g. "Jul 29, 2022").<br>
+  Default: `false`<br>
+  **Note:** If combined with `--footerTime`, it will append "Jul 29, 2022, 3:44:42 PM GMT+2".
 
-**Note:**
-
-- All extras are disabled by default, they are now opt-in.
-- When favicon is enabled, its file is copied into the documentation's output directory (`--out`).
+- `--footerTime` (deprecated)<br>
+  Appends the time of generation in the footer (e.g. "3:44:42 PM GMT+2").<br>
+  Default: `false`<br>
+  **Note:** If combined with `--footerDate`, it will append "Jul 29, 2022, 3:44:42 PM GMT+2".
 
 ## Testing
 
