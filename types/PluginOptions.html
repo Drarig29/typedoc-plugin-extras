@@ -18,7 +18,7 @@
 <h1>Type alias PluginOptions</h1></div>
 <div class="tsd-signature">Plugin<wbr/>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><a href="PluginOptionsGetter.html" class="tsd-signature-type" data-tsd-kind="Type alias">PluginOptionsGetter</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;options&quot;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Drarig29/typedoc-plugin-extras/blob/5ed2353/src/main.ts#L35">main.ts:35</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/Drarig29/typedoc-plugin-extras/blob/fcb5b01/src/main.ts#L35">main.ts:35</a></li></ul></aside></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
@@ -50,15 +50,38 @@
 <p style="line-height: 28px;">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a> v0.23.20<br>
             <span id="generation-date"></span>
             <script>
-                window.GENERATION_DATE = 1667689861568;
+                window.GENERATION_DATE = 1667689954606;
 
                 (() => {
                     
-        const formatter = new Intl.DateTimeFormat(navigator.language, {
-            dateStyle: 'medium',timeStyle: 'long'
+        const formatter = new Intl.RelativeTimeFormat('en', {
+            numeric: 'auto',
+            style: 'short',
         });
 
-        document.getElementById('generation-date').innerText = formatter.format(window.GENERATION_DATE);
+        const divisions = [
+            { amount: 60, name: 'seconds' },
+            { amount: 60, name: 'minutes' },
+            { amount: 24, name: 'hours' },
+            { amount: 7, name: 'days' },
+            { amount: 4.34524, name: 'weeks' },
+            { amount: 12, name: 'months' },
+            { amount: Number.POSITIVE_INFINITY, name: 'years' }
+        ];
+
+        function formatTimeAgo(date) {
+            let duration = (date - new Date()) / 1000;
+            
+            for (const division of divisions) {
+                if (Math.abs(duration) < division.amount) {
+                    return formatter.format(Math.round(duration), division.name);
+                }
+                duration /= division.amount;
+            }
+        }
+
+        document.getElementById('generation-date').title = new Date(window.GENERATION_DATE).toLocaleString();
+        document.getElementById('generation-date').innerText = `Last modified ${formatTimeAgo(window.GENERATION_DATE)}`;
     
                 })();
             </script>
