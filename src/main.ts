@@ -9,26 +9,30 @@ import {
     replaceTopMostTitle,
     replaceTopMostTitleLink,
     replaceDescription,
-    setupNewlineInFooter
+    setupNewlineInFooter,
+    getLastModifiedScript,
+    getDateTimeScript
 } from './helpers';
 
 const TYPEDOC_VERSION = Application.VERSION;
 
-const pluginOptions = (app: Application) => ({
+export const pluginOptions = (app: Application) => ({
     options: () => ({
         outDir: app.options.getValue('out') as string | undefined,
         hideGenerator: app.options.getValue('hideGenerator') as boolean,
         favicon: app.options.getValue('favicon') as string | undefined,
         footerDate: app.options.getValue('footerDate') as boolean,
         footerTime: app.options.getValue('footerTime') as boolean,
+        footerLastModified: app.options.getValue('footerLastModified') as boolean,
         footerTypedocVersion: app.options.getValue('footerTypedocVersion') as boolean,
         customTitle: app.options.getValue('customTitle') as string | undefined,
         customTitleLink: app.options.getValue('customTitleLink') as string | undefined,
-        customDescription: app.options.getValue('customDescription') as string | undefined
+        customDescription: app.options.getValue('customDescription') as string | undefined,
     }),
 });
 
-type PluginOptions = ReturnType<typeof pluginOptions>;
+export type PluginOptionsGetter = ReturnType<typeof pluginOptions>;
+export type PluginOptions = ReturnType<PluginOptionsGetter['options']>;
 
 export function load(app: Application) {
     app.options.addDeclaration({
@@ -60,6 +64,13 @@ export function load(app: Application) {
     });
 
     app.options.addDeclaration({
+        name: 'footerLastModified',
+        help: 'Extras Plugin: Appends a "Last Modified" text in the footer.',
+        type: ParameterType.Boolean,
+        defaultValue: false,
+    });
+
+    app.options.addDeclaration({
         name: 'customTitle',
         help: 'Extras Plugin: Specify a custom title, for the top-most title only.',
         type: ParameterType.String,
@@ -86,7 +97,7 @@ export function load(app: Application) {
     app.renderer.once(RendererEvent.END, onRenderFinished.bind(options));
 }
 
-function onPageRendered(this: PluginOptions, page: PageEvent) {
+function onPageRendered(this: PluginOptionsGetter, page: PageEvent) {
     if (!page.contents)
         return;
 
@@ -108,20 +119,27 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
 
     page.contents = setupNewlineInFooter(page.contents);
 
-    // Add generation date and/or time.
-    if (!options.hideGenerator && (options.footerDate || options.footerTime)) {
+    // Add generation date.
+    if (!options.hideGenerator && (options.footerLastModified || options.footerDate || options.footerTime)) {
         const now = new Date();
 
-        let args = [];
-        if (options.footerDate) args.push("dateStyle: 'medium'");
-        if (options.footerTime) args.push("timeStyle: 'long'");
+        const script = options.footerLastModified
+            ? getLastModifiedScript()
+            : getDateTimeScript(options);
 
-        const dateFormatter = `new Intl.DateTimeFormat(navigator.language, {${args.join(',')}})`
+        // Populate the generation date element on page load.
+        const html = `<br>
+            <span id="generation-date"></span>
+            <script>
+                window.GENERATION_DATE = ${now.getTime()};
 
-        // Compute the generation date string on client-side.
-        const time = `<br><span id="generation-date"></span><script>window.GENERATION_DATE=${now.getTime()};document.getElementById('generation-date').innerText=${dateFormatter}.format(window.GENERATION_DATE)</script>`;
+                (() => {
+                    ${script}
+                })();
+            </script>
+        `;
 
-        page.contents = appendToFooter(page.contents, time);
+        page.contents = appendToFooter(page.contents, html);
     }
 
     // Set custom title.
@@ -140,7 +158,7 @@ function onPageRendered(this: PluginOptions, page: PageEvent) {
     }
 }
 
-function onRenderFinished(this: PluginOptions) {
+function onRenderFinished(this: PluginOptionsGetter) {
     const options = this.options()
 
     // Copy favicon to output directory.
