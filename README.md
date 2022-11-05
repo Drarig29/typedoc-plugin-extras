@@ -19,7 +19,9 @@ Feel free to ask for another extra or to make a PR 😉
 
 ## Example
 
-You can view an example documentation using this plugin here: https://drarig29.github.io/typedoc-plugin-extras/
+You can view an example documentation using this plugin here:
+
+https://drarig29.github.io/typedoc-plugin-extras/
 
 ## Installation
 
@@ -75,15 +77,15 @@ The following arguments can be used in addition to the default [TypeDoc argument
 
 ## Testing
 
-To test this plugin, you can generate TypeDoc documentation _for this plugin_.
+To test this plugin, you can generate TypeDoc documentation for this plugin.
 
-To do this, you'll first need to build the plugin:
+To do so, you'll first need to build it:
 
 ```bash
 npm run build
 ```
 
-You can now generate the documentation with the plugin (from the source):
+Then, you can generate the documentation with the plugin (from source):
 
 ```bash
 npm test
@@ -91,4 +93,4 @@ npm test
 
 ## License
 
-[MIT](https://github.com/Drarig29/typedoc-plugin-extras/blob/main/LICENSE)
+[MIT](./LICENSE)
