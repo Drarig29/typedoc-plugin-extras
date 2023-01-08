@@ -11,7 +11,8 @@ import {
     replaceDescription,
     setupNewlineInFooter,
     getLastModifiedScript,
-    getDateTimeScript
+    getDateTimeScript,
+    insertGAScriptInHead
 } from './helpers';
 
 const TYPEDOC_VERSION = Application.VERSION;
@@ -28,6 +29,7 @@ export const pluginOptions = (app: Application) => ({
         customTitle: app.options.getValue('customTitle') as string | undefined,
         customTitleLink: app.options.getValue('customTitleLink') as string | undefined,
         customDescription: app.options.getValue('customDescription') as string | undefined,
+        gaMeasurementId: app.options.getValue('gaMeasurementId') as string | undefined,
     }),
 });
 
@@ -91,6 +93,11 @@ export function load(app: Application) {
         defaultValue: undefined
     });
 
+    app.options.addDeclaration({
+        name: 'gaMeasurementId',
+        help: 'Extras Plugin: Specify a Google Analytics measurement ID to insert in a gtag.js snippet.'
+    });
+
     const options = pluginOptions(app);
 
     app.renderer.on(PageEvent.END, onPageRendered.bind(options));
@@ -117,8 +124,6 @@ function onPageRendered(this: PluginOptionsGetter, page: PageEvent) {
         page.contents = appendToFooter(page.contents, ` v${TYPEDOC_VERSION}`);
     }
 
-    page.contents = setupNewlineInFooter(page.contents);
-
     // Add generation date.
     if (!options.hideGenerator && (options.footerLastModified || options.footerDate || options.footerTime)) {
         const now = new Date();
@@ -139,6 +144,7 @@ function onPageRendered(this: PluginOptionsGetter, page: PageEvent) {
             </script>
         `;
 
+        page.contents = setupNewlineInFooter(page.contents);
         page.contents = appendToFooter(page.contents, html);
     }
 
@@ -152,9 +158,14 @@ function onPageRendered(this: PluginOptionsGetter, page: PageEvent) {
         page.contents = replaceTopMostTitleLink(page.contents, options.customTitleLink);
     }
 
-    // Set custom description
+    // Set custom description.
     if (options.customDescription) {
         page.contents = replaceDescription(page.contents, options.customDescription);
+    }
+
+    // Insert Google Analytics script.
+    if (options.gaMeasurementId) {
+        page.contents = insertGAScriptInHead(page.contents, options.gaMeasurementId);
     }
 }
 

@@ -77,6 +77,10 @@ The following arguments can be used in addition to the default [TypeDoc argument
   Default: `false`<br>
   **Note:** If combined with `--footerDate`, it will append "Jul 29, 2022, 3:44:42 PM GMT+2".
 
+- `--favicon`<br>
+  Specify a [Google Analytics](https://support.google.com/analytics/answer/1008080?hl=en&ref_topic=1008079#zippy=%2Cin-this-article%2Cstatic-website) measurement ID to insert in a `gtag.js` snippet.<br>
+  Example: `abc123`<br>
+
 ## Testing
 
 To test this plugin, you can generate TypeDoc documentation for this plugin.

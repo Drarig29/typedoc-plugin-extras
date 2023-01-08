@@ -24,7 +24,6 @@ export function makeRelativeToRoot(hostPath: string, targetFilename: string): st
  */
 export function appendFavicon(html: string, url: string): string {
     return html.replace('</head>',
-        '\t' + // Some tabulation to fit the rest of the document.
         `<link rel="icon" href="${url}" />` +
         '\n' + // Push the end of <head> to the next line.
         '</head>'
@@ -45,7 +44,7 @@ export function appendToFooter(html: string, value: string): string {
 }
 
 /**
- * Sets up the newline in footer.
+ * Sets up a space between the first line of the footer and the date.
  * @param html HTML string to append to.
  */
 export function setupNewlineInFooter(html: string): string {
@@ -156,3 +155,22 @@ export const getDateTimeScript = (options: PluginOptions) => {
         document.getElementById('generation-date').innerText = formatter.format(window.GENERATION_DATE);
     `;
 };
+
+export const insertGAScriptInHead = (html: string, measurementId: string) => {
+    const script = `<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${measurementId}"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '${measurementId}');
+</script>`
+
+    return html.replace('<head>',
+        '<head>' +
+        '\n' +
+        script +
+        '\n'
+    );
+}
