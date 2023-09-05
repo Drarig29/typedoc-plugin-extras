@@ -7,30 +7,32 @@ import {
     makeRelativeToRoot,
     isUrl,
     replaceTopMostTitle,
-    replaceTopMostTitleLink,
     replaceDescription,
     setupNewlineInFooter,
     getLastModifiedScript,
     getDateTimeScript,
-    insertGAScriptInHead
+    deprecatedOption,
 } from './helpers';
 
 const TYPEDOC_VERSION = Application.VERSION;
 
 export const pluginOptions = (app: Application) => ({
-    options: () => ({
-        outDir: app.options.getValue('out') as string | undefined,
-        hideGenerator: app.options.getValue('hideGenerator') as boolean,
-        favicon: app.options.getValue('favicon') as string | undefined,
-        footerDate: app.options.getValue('footerDate') as boolean,
-        footerTime: app.options.getValue('footerTime') as boolean,
-        footerLastModified: app.options.getValue('footerLastModified') as boolean,
-        footerTypedocVersion: app.options.getValue('footerTypedocVersion') as boolean,
-        customTitle: app.options.getValue('customTitle') as string | undefined,
-        customTitleLink: app.options.getValue('customTitleLink') as string | undefined,
-        customDescription: app.options.getValue('customDescription') as string | undefined,
-        gaMeasurementId: app.options.getValue('gaMeasurementId') as string | undefined,
-    }),
+    options: () => {
+        deprecatedOption(app, { name: 'customTitleLink', inFavorOf: 'titleLink' })
+        deprecatedOption(app, { name: 'gaMeasurementId', inFavorOf: 'gaID' })
+
+        return {
+            outDir: app.options.getValue('out') as string | undefined,
+            hideGenerator: app.options.getValue('hideGenerator') as boolean,
+            favicon: app.options.getValue('favicon') as string | undefined,
+            footerDate: app.options.getValue('footerDate') as boolean,
+            footerTime: app.options.getValue('footerTime') as boolean,
+            footerLastModified: app.options.getValue('footerLastModified') as boolean,
+            footerTypedocVersion: app.options.getValue('footerTypedocVersion') as boolean,
+            customTitle: app.options.getValue('customTitle') as string | undefined,
+            customDescription: app.options.getValue('customDescription') as string | undefined,
+        }
+    },
 });
 
 export type PluginOptionsGetter = ReturnType<typeof pluginOptions>;
@@ -80,13 +82,6 @@ export function load(app: Application) {
     });
 
     app.options.addDeclaration({
-        name: 'customTitleLink',
-        help: 'Extras Plugin: Specify a custom link for the top-most title.',
-        type: ParameterType.String,
-        defaultValue: undefined
-    });
-
-    app.options.addDeclaration({
         name: 'customDescription',
         help: 'Extras Plugin: Specify a custom description for the website.',
         type: ParameterType.String,
@@ -94,8 +89,13 @@ export function load(app: Application) {
     });
 
     app.options.addDeclaration({
+        name: 'customTitleLink',
+        help: 'Extras Plugin: deprecated. Will be removed in the next release.',
+    });
+
+    app.options.addDeclaration({
         name: 'gaMeasurementId',
-        help: 'Extras Plugin: Specify a Google Analytics measurement ID to insert in a gtag.js snippet.'
+        help: 'Extras Plugin: deprecated. Will be removed in the next release.'
     });
 
     const options = pluginOptions(app);
@@ -153,19 +153,9 @@ function onPageRendered(this: PluginOptionsGetter, page: PageEvent) {
         page.contents = replaceTopMostTitle(page.contents, options.customTitle);
     }
 
-    // Set custom title link.
-    if (options.customTitleLink) {
-        page.contents = replaceTopMostTitleLink(page.contents, options.customTitleLink);
-    }
-
     // Set custom description.
     if (options.customDescription) {
         page.contents = replaceDescription(page.contents, options.customDescription);
-    }
-
-    // Insert Google Analytics script.
-    if (options.gaMeasurementId) {
-        page.contents = insertGAScriptInHead(page.contents, options.gaMeasurementId);
     }
 }
 

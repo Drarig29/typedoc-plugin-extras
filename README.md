@@ -6,9 +6,12 @@
 
 A [TypeDoc](https://github.com/TypeStrong/typedoc) plugin to add extras to the output documentation.
 
-- It can set a custom top-most title name and/or link.
-- It can find the `<head>` of the documents and append a favicon to it.
-- It can also add date/time of generation after "Generated using TypeDoc" in the footer. (cf. the [example](#example) below)
+It allows you to:
+
+- Set a custom favicon.
+- Add the date/time of generation after "Generated using TypeDoc" in the footer. (cf. the [example](#example) below)
+- Set a custom top-most title name (without changing the package name, like `--name` would do).
+  - For example, you could have `--customTitle "Go back" --titleLink <url-of-your-parent-documentation>`
 - And more... (cf. the list of [arguments](#arguments) below)
 
 **No date/time will be added if `--hideGenerator` is set (because the footer wouldn't exist).**
@@ -45,13 +48,9 @@ The following arguments can be used in addition to the default [TypeDoc argument
   Specify a custom title, for the top-most title only.<br>
   Example: `foo`
 
-- `--customTitleLink`<br>
-  Specify a custom link for the top-most title.<br>
-  Example: `https://parent-docs-site.com`
-
 - `--customDescription`<br>
-  Specify a custom meta description.<br>
-  Example: `A test description`
+  Specify a custom `<meta name="description"` property.<br>
+  Example: `An example description`
 
 - `--favicon`<br>
   Specify the path or URL of the favicon file.<br>
@@ -76,10 +75,6 @@ The following arguments can be used in addition to the default [TypeDoc argument
   Appends the time of generation in the footer (e.g. "3:44:42 PM GMT+2").<br>
   Default: `false`<br>
   **Note:** If combined with `--footerDate`, it will append "Jul 29, 2022, 3:44:42 PM GMT+2".
-
-- `--gaMeasurementId`<br>
-  Specify a [Google Analytics](https://support.google.com/analytics/answer/1008080?hl=en&ref_topic=1008079#zippy=%2Cin-this-article%2Cstatic-website) measurement ID to insert in a `gtag.js` snippet.<br>
-  Example: `abc123`<br>
 
 ## Testing
 

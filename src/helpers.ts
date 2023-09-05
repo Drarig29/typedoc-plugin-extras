@@ -1,4 +1,5 @@
-import { PluginOptions } from "./main";
+import type { Application } from "typedoc";
+import type { PluginOptions } from "./main";
 
 /**
  * Creates a relative path from a host file to a target file which is located in the root.
@@ -91,21 +92,6 @@ export function replaceDescription(html: string, description: string): string {
     );
 }
 
-/**
- * Replaces the top-most title link.
- * @param html HTML string to replace into.
- * @param link The new link to set.
- */
-export function replaceTopMostTitleLink(html: string, link: string): string {
-    return html.replace(/(<a href=")([^"]*)(" class="title">)([^<]*)(<\/a>)/,
-        '$1' + // Start of <a>
-        link +
-        '$3' + // The class
-        '$4' + // The title
-        '$5' // End of <a>
-    );
-}
-
 export const getLastModifiedScript = () => {
     // Use English as the locale because we say "Last modified".
     // The title of the element (shown on hover) contains the locale string with the user's timezone.
@@ -156,21 +142,10 @@ export const getDateTimeScript = (options: PluginOptions) => {
     `;
 };
 
-export const insertGAScriptInHead = (html: string, measurementId: string) => {
-    const script = `<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=${measurementId}"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', '${measurementId}');
-</script>`
-
-    return html.replace('<head>',
-        '<head>' +
-        '\n' +
-        script +
-        '\n'
-    );
+export const deprecatedOption = (app: Application, { name, inFavorOf }: { name: string, inFavorOf: string }) => {
+    if (app.options.getValue(name)) {
+        const error = Error(`[typedoc-plugin-extras] The \`--${name}\` option is deprecated. Please use \`--${inFavorOf}\` instead.`)
+        delete error.stack
+        throw error
+    }
 }
