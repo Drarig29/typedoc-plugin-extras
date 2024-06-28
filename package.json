@@ -34,10 +34,10 @@
         "typedoc"
     ],
     "peerDependencies": {
-        "typedoc": "0.25.x"
+        "typedoc": "0.26.x"
     },
     "devDependencies": {
         "@types/node": "^18.15.11",
-        "typescript": "^5.0.4"
+        "typescript": "^5.5.2"
     }
 }

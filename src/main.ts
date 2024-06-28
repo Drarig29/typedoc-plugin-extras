@@ -101,7 +101,7 @@ export function load(app: Application) {
     const options = pluginOptions(app);
 
     app.renderer.on(PageEvent.END, onPageRendered.bind(options));
-    app.renderer.once(RendererEvent.END, onRenderFinished.bind(options));
+    app.renderer.on(RendererEvent.END, onRenderFinished.bind(options));
 }
 
 function onPageRendered(this: PluginOptionsGetter, page: PageEvent) {
