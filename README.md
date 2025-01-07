@@ -8,7 +8,6 @@ A [TypeDoc](https://github.com/TypeStrong/typedoc) plugin to add extras to the o
 
 It allows you to:
 
-- Set a custom favicon.
 - Add the date/time of generation after "Generated using TypeDoc" in the footer. (cf. the [example](#example) below)
 - Set a custom top-most title name (without changing the package name, like `--name` would do).
   - For example, you could have `--customTitle "Go back" --titleLink <url-of-your-parent-documentation>`
@@ -19,6 +18,9 @@ It allows you to:
 All extras are disabled by default: they are opt-in.
 
 Feel free to ask for another extra or to make a PR 😉
+
+> [!IMPORTANT]  
+> TypeDoc [now natively supports specifying a favicon](https://typedoc.org/documents/Options.Output.html#favicon). Consequently, the `--favicon` option in this plugin has been removed to prevent conflicts.
 
 ## Example
 
@@ -51,11 +53,6 @@ The following arguments can be used in addition to the default [TypeDoc argument
 - `--customDescription`<br>
   Specify a custom `<meta name="description"` property.<br>
   Example: `An example description`
-
-- `--favicon`<br>
-  Specify the path or URL of the favicon file.<br>
-  Example: `public/favicon.ico`<br>
-  **Note:** If given a path, the favicon file is copied into the documentation's output directory (`--out`).
 
 - `--footerTypedocVersion`<br>
   Appends the TypeDoc version in the footer.<br>

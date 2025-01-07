@@ -1,11 +1,6 @@
 import { Application, ParameterType, PageEvent, RendererEvent } from 'typedoc';
-import { join, basename } from 'path';
-import { copyFileSync } from 'fs';
 import {
-    appendFavicon,
     appendToFooter,
-    makeRelativeToRoot,
-    isUrl,
     replaceTopMostTitle,
     replaceDescription,
     setupNewlineInFooter,
@@ -24,7 +19,6 @@ export const pluginOptions = (app: Application) => ({
         return {
             outDir: app.options.getValue('out') as string | undefined,
             hideGenerator: app.options.getValue('hideGenerator') as boolean,
-            favicon: app.options.getValue('favicon') as string | undefined,
             footerDate: app.options.getValue('footerDate') as boolean,
             footerTime: app.options.getValue('footerTime') as boolean,
             footerLastModified: app.options.getValue('footerLastModified') as boolean,
@@ -39,13 +33,6 @@ export type PluginOptionsGetter = ReturnType<typeof pluginOptions>;
 export type PluginOptions = ReturnType<PluginOptionsGetter['options']>;
 
 export function load(app: Application) {
-    app.options.addDeclaration({
-        name: 'favicon',
-        help: 'Extras Plugin: Specify the name of the favicon file.',
-        type: ParameterType.String,
-        defaultValue: undefined
-    });
-
     app.options.addDeclaration({
         name: 'footerTypedocVersion',
         help: 'Extras Plugin: Appends the TypeDoc version in the footer.',
@@ -101,7 +88,6 @@ export function load(app: Application) {
     const options = pluginOptions(app);
 
     app.renderer.on(PageEvent.END, onPageRendered.bind(options));
-    app.renderer.on(RendererEvent.END, onRenderFinished.bind(options));
 }
 
 function onPageRendered(this: PluginOptionsGetter, page: PageEvent) {
@@ -109,15 +95,6 @@ function onPageRendered(this: PluginOptionsGetter, page: PageEvent) {
         return;
 
     const options = this.options();
-
-    // Add icon.
-    if (options.favicon) {
-        const favicon = isUrl(options.favicon)
-            ? options.favicon
-            : makeRelativeToRoot(page.url, basename(options.favicon));
-
-        page.contents = appendFavicon(page.contents, favicon);
-    }
 
     // Add TypeDoc version.
     if (options.footerTypedocVersion) {
@@ -159,20 +136,3 @@ function onPageRendered(this: PluginOptionsGetter, page: PageEvent) {
     }
 }
 
-function onRenderFinished(this: PluginOptionsGetter) {
-    const options = this.options()
-
-    // Copy favicon to output directory.
-    if (options.favicon && !isUrl(options.favicon)) {
-        const workingDir = process.cwd();
-        const outDir = options.outDir || './docs';
-
-        const inputFavicon = (options.favicon.indexOf(workingDir) === -1) ?
-            join(workingDir, options.favicon) : options.favicon;
-
-        const outputFavicon = (outDir.indexOf(workingDir) === -1) ?
-            join(workingDir, outDir, basename(options.favicon)) : join(outDir, basename(options.favicon));
-
-        copyFileSync(inputFavicon, outputFavicon);
-    }
-}
