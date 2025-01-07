@@ -12,7 +12,7 @@ import {
     getLastModifiedScript,
     getDateTimeScript,
     deprecatedOption,
-} from './helpers';
+} from './helpers.js';
 
 const TYPEDOC_VERSION = Application.VERSION;
 

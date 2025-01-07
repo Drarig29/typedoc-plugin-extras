@@ -1,14 +1,15 @@
 {
     "compilerOptions": {
         "target": "es2018",
-        "module": "commonjs",
+        "module": "node16",
         "isolatedModules": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "strict": true,
         "sourceMap": true,
-        "outDir": "dist"
+        "outDir": "dist",
+        "verbatimModuleSyntax": true,
     },
     "include": [
         "src/*.ts"

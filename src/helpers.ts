@@ -1,5 +1,5 @@
 import type { Application } from "typedoc";
-import type { PluginOptions } from "./main";
+import type { PluginOptions } from "./main.js";
 
 /**
  * Creates a relative path from a host file to a target file which is located in the root.
